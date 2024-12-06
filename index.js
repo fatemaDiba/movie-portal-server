@@ -32,8 +32,10 @@ async function run() {
 
     app.post("/add-movie", async (req, res) => {
       const formData = req.body;
-      console.log(formData);
-      const result = await movieCollection.insertOne(formData);
+      const result = await movieCollection.insertOne({
+        formData,
+        createdAt: new Date(),
+      });
       res.send(result);
     });
 
@@ -42,6 +44,16 @@ async function run() {
       const result = await movies.toArray();
       res.send(result);
     });
+
+    app.get("/featured-movies", async (req, res) => {
+      const featuredMovies = await movieCollection
+        .find()
+        .sort({ rating: -1 })
+        .limit(6)
+        .toArray();
+      res.send(featuredMovies);
+    });
+
     // details
     app.get("/all-movies/:id", async (req, res) => {
       const id = req.params.id;
