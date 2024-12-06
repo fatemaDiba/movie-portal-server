@@ -29,6 +29,7 @@ async function run() {
     const movieDb = client.db("MovieDB");
     const movieCollection = movieDb.collection("movieCollection");
     const userCollection = movieDb.collection("userCollection");
+    const favoriteCollection = movieDb.collection("favoriteCollection");
 
     app.post("/add-movie", async (req, res) => {
       const formData = req.body;
@@ -44,7 +45,7 @@ async function run() {
       const result = await movies.toArray();
       res.send(result);
     });
-
+    // sort
     app.get("/featured-movies", async (req, res) => {
       const featuredMovies = await movieCollection
         .find()
@@ -68,6 +69,7 @@ async function run() {
       const result = await movieCollection.deleteOne(query);
       res.send(result);
     });
+
     // update
     app.put("/all-movies/:id", async (req, res) => {
       const id = req.params.id;
@@ -93,6 +95,40 @@ async function run() {
         updateMovie,
         options
       );
+      res.send(result);
+    });
+
+    // add to fav
+    app.post("/my-favorites", async (req, res) => {
+      const favMovie = req.body;
+      const {
+        poster,
+        title,
+        genre,
+        duration,
+        year,
+        rating,
+        summary,
+        userEmail,
+      } = favMovie;
+
+      const query = { title, duration, userEmail, year, rating };
+      const existing = await favoriteCollection.findOne(query);
+      if (existing) {
+        return res.send({ message: "Movie Already Exists" });
+      }
+      const data = {
+        poster,
+        title,
+        genre,
+        duration,
+        year,
+        rating,
+        summary,
+        userEmail,
+      };
+
+      const result = await favoriteCollection.insertOne(data);
       res.send(result);
     });
 
