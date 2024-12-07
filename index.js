@@ -1,5 +1,5 @@
 import { MongoClient, ObjectId, ServerApiVersion } from "mongodb";
-import express from "express";
+import express, { query } from "express";
 import cors from "cors";
 import "dotenv/config";
 const app = express();
@@ -134,6 +134,13 @@ async function run() {
     app.get("/my-favorites", async (req, res) => {
       const favMovies = favoriteCollection.find();
       const result = await favMovies.toArray();
+      res.send(result);
+    });
+
+    app.delete("/my-favorites/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await favoriteCollection.deleteOne(query);
       res.send(result);
     });
 
