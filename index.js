@@ -131,8 +131,10 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/my-favorites", async (req, res) => {
-      const favMovies = favoriteCollection.find();
+    app.get("/my-favorites/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { userEmail: email };
+      const favMovies = favoriteCollection.find(query);
       const result = await favMovies.toArray();
       res.send(result);
     });
