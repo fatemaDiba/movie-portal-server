@@ -34,7 +34,7 @@ async function run() {
     app.post("/add-movie", async (req, res) => {
       const formData = req.body;
       const result = await movieCollection.insertOne({
-        formData,
+        ...formData,
         createdAt: new Date(),
       });
       res.send(result);
@@ -127,8 +127,13 @@ async function run() {
         summary,
         userEmail,
       };
-
       const result = await favoriteCollection.insertOne(data);
+      res.send(result);
+    });
+
+    app.get("/my-favorites", async (req, res) => {
+      const favMovies = favoriteCollection.find();
+      const result = await favMovies.toArray();
       res.send(result);
     });
 
