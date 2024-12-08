@@ -1,7 +1,5 @@
 <h1>Project Name: Movie Portal - Backend</h1>
 
-<h2>Link: <a href="">Click here to access the Movie Portal</a></h2>
-
 <h2>Purpose:</h2>
     <p>
         This repository contains the backend of the <strong>Movie Portal</strong>, a web application that allows users to manage movies, add movies, update movies and add to favorite list operations. The backend is built using Node.js, Express, and MongoDB, with RESTful APIs for seamless integration with the frontend.
