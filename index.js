@@ -45,6 +45,22 @@ async function run() {
       const result = await movies.toArray();
       res.send(result);
     });
+
+    // sort by rate
+    app.post("/all-movies/sort-by-rate", async (req, res) => {
+      const { sortValue } = req.body;
+
+      if (sortValue === "") {
+        const movies = await movieCollection.find().toArray();
+        return res.send(movies);
+      }
+      const sortedMovies = await movieCollection
+        .find()
+        .sort({ rating: parseInt(sortValue) })
+        .toArray();
+      res.send(sortedMovies);
+    });
+
     // sort
     app.get("/featured-movies", async (req, res) => {
       const featuredMovies = await movieCollection
